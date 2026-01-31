@@ -1,0 +1,7 @@
+<link rel="stylesheet" href="/static/style.css">
+<div class="box">
+<h2>Chart Dashboard</h2>
+{% for d in data %}
+<p>{{d.status}} : {{d.count}}</p>
+{% endfor %}
+</div>

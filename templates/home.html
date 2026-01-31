@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Home</title>
+    <style>
+        body {
+            background-image: url("https://images.unsplash.com/photo-1498050108023-c5249f4df085");
+            background-size: cover;
+            font-family: Arial;
+            color: white;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.75);
+            margin: 20px;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .card {
+            display: flex;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .card img {
+            width: 200px;
+            height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .btn {
+            background: #00c896;
+            color: white;
+            padding: 6px 10px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-right: 5px;
+        }
+
+        .approved {
+            background: #00c896
+        }
+
+        .rejected {
+            background: #ff4d4d
+        }
+
+        .pending {
+            background: #ffaa00
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: #2a2a40;
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
+            font-size: 0.9em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #00f260;
+            border: none;
+            border-radius: 8px;
+            color: #1e1e2f;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 1.1em;
+            outline: none;
+            backdrop-filter: blur(5px);
+            transition: background 0.3s;
+            text-align: center;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 15px rgba(0, 242, 96, 0.3);
+        }
+
+        .cat-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cat-btn:hover,
+        .cat-btn.active {
+            background: #00f260;
+            color: #1e1e2f;
+            border-color: #00f260;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="search-container">
+            <div class="search-container">
+                <!-- Text Search -->
+                <input type="text" id="searchInput" class="search-input"
+                    placeholder="Search by name, ID, or description..." style="margin-bottom: 15px;">
+
+                <!-- Step 1: Date -->
+                <input type="date" id="dateInput" class="search-input" style="text-align: left; color-scheme: dark;">
+
+                <!-- Step 2: Categories (Hidden initially) -->
+                <div id="categoryFilters" style="display:none; margin-top: 15px; text-align: center;">
+                    <p style="color:#ccc; font-size:0.9em; margin-bottom:10px;">Select Category:</p>
+                    <button class="cat-btn active" onclick="filterItems('all')">All</button>
+                    <button class="cat-btn" onclick="filterItems('Electronics')">Electronics</button>
+                    <button class="cat-btn" onclick="filterItems('Documents')">Documents</button>
+                    <button class="cat-btn" onclick="filterItems('Clothing')">Clothing</button>
+                    <button class="cat-btn" onclick="filterItems('Accessories')">Accessories</button>
+                    <button class="cat-btn" onclick="filterItems('Stationary')">Stationary</button>
+                    <button class="cat-btn" onclick="filterItems('Other')">Other</button>
+                </div>
+            </div>
+
+            <h1>🔍 Lost & Found</h1>
+
+
+
+            <button onclick="openModal()" class="btn" style="cursor: pointer; border:none; font-size: 1em;">➕
+                Add</button>
+            <a href="/dashboard" class="btn">📊 Dashboard</a>
+            <a href="/logout" class="btn">Logout</a>
+
+            <hr>
+
+            {% for i in items %}
+            <div class="card">
+                <img src="{{ url_for('static', filename='uploads/' + i['image']) }}">
+                <div>
+                    <p style="color: #00f260; font-size: 0.8em; margin-bottom: 5px;">
+                        User ID: {{ i['reporter_id'] }}
+                        {% if user == i['owner_email'] %}
+                        <span
+                            style="background:#00f260; color:black; padding:2px 8px; border-radius:10px; font-size:0.8em; margin-left:10px; font-weight:bold;">YOU</span>
+                        {% endif %}
+                    </p>
+                    <h2>{{ i['name'] }}</h2>
+                    <p><b>Category:</b> {{ i['category'] }}</p>
+                    {% if i['location'] %}
+                    <p><b>📍 Location:</b> {{ i['location'] }}</p>
+                    {% endif %}
+                    <p><b>Date:</b> {{ i['date'] }}</p>
+                    <p>{{ i['description'] }}</p>
+
+                    <p class="btn {{ i['status'] }}">{{ i['status'] }}</p>
+
+                    {% if user == 'laptopa321ba@gmail.com' %}
+                    <a href="/approve/{{ i['id'] }}" class="btn">Approve</a>
+                    <a href="/edit/{{ i['id'] }}" class="btn" style="background: #ffaa00;">✏️ Edit</a>
+                    {% endif %}
+
+                    <a href="/chat/{{ i['id'] }}" class="btn" style="background: #0575e6;">💬 Chat</a>
+
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+        <!-- Add Item Modal -->
+        <div id="addModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>➕ Report Lost Item</h2>
+                <form action="/add" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>User ID</label>
+                        <input type="text" name="reporter_id" placeholder="Enter your ID" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Item Name</label>
+                        <input type="text" name="name" placeholder="E.g. Blue Backpack" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Type of Item (Category)</label>
+                        <select name="category" required>
+                            <option value="" disabled selected>Select a type...</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Documents">Documents</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Stationary">Stationary</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date Lost/Found</label>
+                        <input type="date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="description" placeholder="Provide details..." rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Image</label>
+                        <input type="file" name="image" required>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Submit Report</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal Scripts -->
+        <script>
+            const modal = document.getElementById("addModal");
+
+            function openModal() {
+                modal.style.display = "flex";
+            }
+
+            function closeModal() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+
+            // Advanced Filter Functionality
+            const textInput = document.getElementById('searchInput');
+            const dateInput = document.getElementById('dateInput');
+
+            let currentCategory = 'all';
+
+            // Listeners
+            textInput.addEventListener('keyup', applyFilters);
+            dateInput.addEventListener('change', function () {
+                const catSection = document.getElementById('categoryFilters');
+                if (this.value) {
+                    catSection.style.display = 'block';
+                }
+                applyFilters();
+            });
+
+            window.filterItems = function (category) {
+                currentCategory = category;
+
+                let btns = document.getElementsByClassName('cat-btn');
+                for (let b of btns) {
+                    b.classList.remove('active');
+                    if (b.innerText === category || (category === 'all' && b.innerText === 'All')) {
+                        b.classList.add('active');
+                    }
+                }
+                applyFilters();
+            }
+
+            function applyFilters() {
+                let filterText = textInput.value.toLowerCase();
+                let selectedDate = dateInput.value;
+                let cards = document.getElementsByClassName('card');
+
+                for (let i = 0; i < cards.length; i++) {
+                    let card = cards[i];
+                    let text = (card.textContent || card.innerText).toLowerCase();
+
+                    // 1. Text Match
+                    let textMatch = text.indexOf(filterText) > -1;
+
+                    // 2. Date Match (if date selected)
+                    let dateMatch = true;
+                    if (selectedDate) {
+                        dateMatch = text.includes("date: " + selectedDate);
+                    }
+
+                    // 3. Category Match
+                    let catMatch = true;
+                    if (currentCategory !== 'all') {
+                        catMatch = text.includes("category: " + currentCategory.toLowerCase());
+                    }
+
+                    if (textMatch && dateMatch && catMatch) {
+                        card.style.display = "";
+                    } else {
+                        card.style.display = "none";
+                    }
+                }
+            }
+        </script>
+</body>
+
+</html>

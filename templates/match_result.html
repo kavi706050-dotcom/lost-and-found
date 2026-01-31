@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Match Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #10101a, #1a1a2e);
+            font-family: 'Inter', sans-serif;
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 900px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f260;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+        }
+
+        .comparison {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .img-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .img-card img {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .img-card p {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .scan-line-container {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* Connecting visual */
+        .connector {
+            flex: 0 0 50px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00f260, transparent);
+            animation: pulse 2s infinite;
+        }
+
+        .result-box {
+            background: rgba(0, 242, 96, 0.1);
+            border: 2px solid #00f260;
+            display: inline-block;
+            padding: 20px 50px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(0, 242, 96, 0.2);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .score {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px #00f260;
+        }
+
+        .label {
+            display: block;
+            font-size: 1.2em;
+            color: #aaffc3;
+            margin-top: 5px;
+        }
+
+        .actions {
+            margin-top: 30px;
+        }
+
+        .btn {
+            background: white;
+            color: #1a1a2e;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.3;
+                width: 20px;
+            }
+
+            50% {
+                opacity: 1;
+                width: 100px;
+            }
+
+            100% {
+                opacity: 0.3;
+                width: 20px;
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Analysis Complete</h1>
+
+        <div class="comparison">
+            <div class="img-card">
+                <img src="{{ url_for('static', filename='uploads/' + item.image) }}">
+                <p>Original Item</p>
+            </div>
+
+            <div class="connector"></div>
+
+            <div class="img-card">
+                <img src="{{ url_for('static', filename='uploads/' + verify_img) }}">
+                <p>Verification Photo</p>
+            </div>
+        </div>
+
+        <div class="result-box">
+            <div class="score">{{ score }}%</div>
+            <span class="label">Similarity Match</span>
+        </div>
+
+        <div class="actions">
+            <a href="/home" class="btn">Proceed to Home ➡</a>
+        </div>
+    </div>
+
+</body>
+
+</html>
