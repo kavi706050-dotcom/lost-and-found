@@ -1,8 +1,0 @@
-Flask==3.1.2
-gunicorn==23.0.0
-Werkzeug==3.1.5
-Jinja2==3.1.6
-itsdangerous==2.2.0
-click==8.3.1
-blinker==1.9.0
-sqlite3-binary; python_version < '3.13'
