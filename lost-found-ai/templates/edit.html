@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Item</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        h2 {
+            text-align: center;
+            color: #00f260;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #ccc;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid #00f260;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #00f260;
+            border: none;
+            border-radius: 8px;
+            color: #1e1e2f;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .cancel {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .cancel:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .current-img {
+            display: block;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin: 10px auto;
+            border: 2px solid #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>✏️ Edit Item</h2>
+        <form method="POST" enctype="multipart/form-data">
+
+            <label>User ID</label>
+            <input type="text" name="reporter_id" value="{{ item.reporter_id }}" required>
+
+            <label>Item Name</label>
+            <input type="text" name="name" value="{{ item.name }}" required>
+
+            <label>Category</label>
+            <select name="category" required>
+                <option value="Electronics" {% if item.category=='Electronics' %}selected{% endif %}>Electronics
+                </option>
+                <option value="Documents" {% if item.category=='Documents' %}selected{% endif %}>Documents</option>
+                <option value="Clothing" {% if item.category=='Clothing' %}selected{% endif %}>Clothing</option>
+                <option value="Accessories" {% if item.category=='Accessories' %}selected{% endif %}>Accessories
+                </option>
+                <option value="Stationary" {% if item.category=='Stationary' %}selected{% endif %}>Stationary</option>
+                <option value="Other" {% if item.category=='Other' %}selected{% endif %}>Other</option>
+            </select>
+
+            <label>Location Status</label>
+            <input type="text" name="location" value="{{ item.location or '' }}"
+                placeholder="E.g. At Reception, Storage Room B">
+
+            <label>Date Lost/Found</label>
+            <input type="date" name="date" value="{{ item.date }}" required>
+
+            <label>Description</label>
+            <textarea name="description" rows="4">{{ item.description }}</textarea>
+
+            <label>Current Image</label>
+            <img src="{{ url_for('static', filename='uploads/' + item.image) }}" class="current-img">
+
+            <label>Change Image (Optional)</label>
+            <input type="file" name="image">
+
+            <button type="submit">💾 Save Changes</button>
+            <a href="/home"><button type="button" class="cancel">Cancel</button></a>
+        </form>
+    </div>
+
+</body>
+
+</html>
